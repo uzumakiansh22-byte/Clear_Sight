@@ -1,0 +1,118 @@
+{
+  "map_name": "campus_map",
+  "units": "meters",
+  "nodes": [
+    {
+      "id": "main_gate",
+      "label": "Main Gate",
+      "x": 100,
+      "y": 300,
+      "aliases": ["main gate", "gate", "front gate", "entrance"]
+    },
+    {
+      "id": "parking",
+      "label": "Visitor Parking",
+      "x": 100,
+      "y": 420,
+      "aliases": ["parking", "car parking", "visitor parking"]
+    },
+    {
+      "id": "admin_block",
+      "label": "Administrative Block",
+      "x": 220,
+      "y": 300,
+      "aliases": ["admin block", "administration", "office", "admin"]
+    },
+    {
+      "id": "central_junction",
+      "label": "Central Campus Junction",
+      "x": 320,
+      "y": 300,
+      "aliases": ["central junction", "main junction", "crossroads", "center"]
+    },
+    {
+      "id": "library_junction",
+      "label": "Library Road Junction",
+      "x": 320,
+      "y": 190,
+      "aliases": ["library junction", "library crossing"]
+    },
+    {
+      "id": "library",
+      "label": "Central Library",
+      "x": 450,
+      "y": 150,
+      "aliases": ["library", "central library", "books"]
+    },
+    {
+      "id": "academic_block",
+      "label": "Academic Block",
+      "x": 450,
+      "y": 300,
+      "aliases": ["academic block", "classrooms", "lecture halls", "college building"]
+    },
+    {
+      "id": "cafeteria",
+      "label": "Campus Cafeteria",
+      "x": 450,
+      "y": 420,
+      "aliases": ["cafeteria", "canteen", "food court", "mess"]
+    },
+    {
+      "id": "hostel_junction",
+      "label": "Hostel Road Junction",
+      "x": 320,
+      "y": 520,
+      "aliases": ["hostel junction", "hostel crossing"]
+    },
+    {
+      "id": "boys_hostel",
+      "label": "Boys Hostel",
+      "x": 450,
+      "y": 540,
+      "aliases": ["boys hostel", "mens hostel", "hostel"]
+    },
+    {
+      "id": "sports_ground",
+      "label": "Sports Ground",
+      "x": 590,
+      "y": 300,
+      "aliases": ["sports ground", "playground", "football ground", "stadium"]
+    },
+    {
+      "id": "medical_center",
+      "label": "Campus Medical Center",
+      "x": 590,
+      "y": 420,
+      "aliases": ["medical center", "health center", "clinic", "first aid"]
+    }
+  ],
+  "edges": [
+    { "from": "main_gate", "to": "parking", "distance": 40, "bidirectional": true },
+    { "from": "main_gate", "to": "admin_block", "distance": 120, "bidirectional": true },
+    { "from": "parking", "to": "admin_block", "distance": 155, "bidirectional": true },
+    { "from": "admin_block", "to": "central_junction", "distance": 90, "bidirectional": true },
+    { "from": "central_junction", "to": "library_junction", "distance": 110, "bidirectional": true },
+    { "from": "library_junction", "to": "library", "distance": 140, "bidirectional": true },
+    { "from": "central_junction", "to": "academic_block", "distance": 130, "bidirectional": true },
+    { "from": "central_junction", "to": "cafeteria", "distance": 155, "bidirectional": true },
+    { "from": "central_junction", "to": "hostel_junction", "distance": 220, "bidirectional": true },
+    { "from": "hostel_junction", "to": "boys_hostel", "distance": 140, "bidirectional": true },
+    { "from": "academic_block", "to": "sports_ground", "distance": 125, "bidirectional": true },
+    { "from": "sports_ground", "to": "medical_center", "distance": 135, "bidirectional": true },
+    { "from": "cafeteria", "to": "medical_center", "distance": 140, "bidirectional": true },
+    { "from": "academic_block", "to": "cafeteria", "distance": 125, "bidirectional": true },
+    { "from": "main_gate", "to": "central_junction", "distance": 205, "bidirectional": true },
+    { "from": "parking", "to": "central_junction", "distance": 230, "bidirectional": true },
+    { "from": "admin_block", "to": "library_junction", "distance": 180, "bidirectional": true },
+    { "from": "admin_block", "to": "academic_block", "distance": 240, "bidirectional": true },
+    { "from": "library_junction", "to": "academic_block", "distance": 190, "bidirectional": true },
+    { "from": "library", "to": "academic_block", "distance": 175, "bidirectional": true },
+    { "from": "library_junction", "to": "hostel_junction", "distance": 290, "bidirectional": true },
+    { "from": "academic_block", "to": "hostel_junction", "distance": 260, "bidirectional": true },
+    { "from": "cafeteria", "to": "boys_hostel", "distance": 190, "bidirectional": true },
+    { "from": "central_junction", "to": "sports_ground", "distance": 260, "bidirectional": true },
+    { "from": "academic_block", "to": "medical_center", "distance": 200, "bidirectional": true },
+    { "from": "library", "to": "sports_ground", "distance": 280, "bidirectional": true }
+  ]
+}
