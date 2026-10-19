@@ -37,3 +37,16 @@ Then download an English Vosk model and put the extracted folder beside
 
 If speech recognition is not configured or the microphone fails, the app opens a
 small text fallback dialog whenever it needs your spoken answer.
+## Vosk Model Setup
+
+1. Download the Vosk small English model.
+2. Extract the downloaded ZIP.
+3. Place the extracted folder inside the offline-navigation directory.
+
+Expected structure:
+
+offline-navigation/
+├── campus_navigator.py
+├── campus_map.json
+├── requirements.txt
+└── vosk-model-small-en-us-0.15/
