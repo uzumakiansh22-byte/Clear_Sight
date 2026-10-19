@@ -21,6 +21,7 @@ The prototype uses:
 * **VL53L1X ToF sensor** — front obstacle detection
 * **HC-SR04 ultrasonic sensor** — left obstacle detection
 * **HC-SR04 ultrasonic sensor** — right obstacle detection
+* **Rear-direction sensor** — rear obstacle detection (the exact sensor model and ESP32 pin mapping are not specified here)
 * **MPU6050 IMU** — movement/standing detection
 * **Two vibration motors** — directional haptic feedback
 * **DFPlayer Mini + speaker** — prerecorded audio feedback
@@ -44,6 +45,7 @@ The system operates locally without requiring:
 | MPU6050                      | Movement detection       | SDA 21, SCL 22    |
 | Left HC-SR04                 | Left obstacle detection  | TRIG 16, ECHO 34  |
 | Right HC-SR04                | Right obstacle detection | TRIG 17, ECHO 35  |
+| Rear-direction sensor        | Rear obstacle detection  | To be documented  |
 | Left vibration motor driver  | Left haptic feedback     | GPIO 25           |
 | Right vibration motor driver | Right haptic feedback    | GPIO 26           |
 | DFPlayer TX                  | Serial communication     | GPIO 18           |
@@ -66,7 +68,7 @@ The ESP32 communicates with the DFPlayer through a hardware UART interface.
 
 # 3. Prototype Sensor Arrangement
 
-The current prototype uses three directions for obstacle detection:
+The current prototype uses four directions for obstacle detection:
 
 ```text
                  FRONT
@@ -84,7 +86,7 @@ The current prototype uses three directions for obstacle detection:
 
 The front ToF sensor is used for detecting **objects in front of the user**.
 
-The left and right ultrasonic sensors provide additional directional coverage.
+The left and right ultrasonic sensors provide side coverage, while the rear-direction sensor monitors obstacles behind the user.
 
 The current prototype does **not** implement dedicated ground, pothole, hole, or drop-off detection.
 
@@ -305,13 +307,53 @@ The IMU therefore enhances system awareness without becoming the primary obstacl
 
 ---
 
-# 12. Current Prototype Limitations
+
+---
+
+# 12. Offline Navigation Prototype
+
+In addition to the obstacle-detection firmware, the repository includes an **offline navigation prototype** in the offline navigation system file. This prototype uses a preloaded map represented as a graph, with the graph data stored in the `graph` file.
+
+The navigation workflow is:
+
+```text
+User speaks starting point and destination
+                  ↓
+        Vosk speech recognition
+                  ↓
+   Identify start and destination names
+                  ↓
+ Match both locations to graph nodes
+                  ↓
+       Preloaded map graph
+                  ↓
+     Dijkstra shortest-path algorithm
+                  ↓
+       Calculate route between nodes
+                  ↓
+   Written + voice navigation feedback
+```
+
+### How it works
+
+1. **Voice input:** The user speaks the starting location and destination.
+2. **Speech recognition:** Vosk detects and recognizes the spoken input.
+3. **Location matching:** The recognized start and destination are located as corresponding nodes in the preloaded graph.
+4. **Route calculation:** Dijkstra's algorithm is used to find the shortest path between those graph nodes.
+5. **Navigation feedback:** The prototype provides the resulting navigation guidance in both written form and voice feedback.
+
+### Scope and limitations
+
+This is a **graph-based offline navigation prototype**. It works with the map graph that has been preloaded in the `graph` file. It should not be described as GPS-based navigation, live map navigation, or automatic real-world positioning. The route can only be calculated for locations and connections represented in the supplied graph.
+
+---
+
+# 13. Current Prototype Limitations
 
 The current prototype is intentionally limited to demonstrate the core concept.
 
 It does **not** currently provide:
 
-* Rear obstacle detection
 * Dedicated pothole detection
 * Dedicated hole/drop-off detection
 * Full ground/terrain analysis
@@ -328,7 +370,7 @@ These are potential features for future versions of the system.
 
 ---
 
-# 13. Future Full Product
+# 14. Future Full Product
 
 The final CLEAR SIGHT product would require additional sensing and a more advanced perception architecture.
 
@@ -361,17 +403,17 @@ A possible future sensor arrangement would include:
 
 ---
 
-# 14. Additional Rear Sensor Coverage
+# 15. Additional Rear Sensor Coverage
 
-The final product could include additional sensors facing backward.
+The current prototype includes a rear-direction sensor. Future versions could improve rear coverage by refining sensor placement or adding further rear-facing sensors.
 
 For example:
 
 ```text
-Front → ToF
-Left  → Ultrasonic / ToF
-Right → Ultrasonic / ToF
-Rear  → Additional HC-SR04 / ToF
+Front → VL53L1X ToF
+Left  → HC-SR04
+Right → HC-SR04
+Rear  → Rear-direction sensor (exact model to be documented)
 ```
 
 This would allow the system to detect obstacles approaching from behind.
@@ -380,7 +422,7 @@ The exact number and placement of sensors would depend on the desired field of v
 
 ---
 
-# 15. HC-SR04 vs ToF for Future Versions
+# 16. HC-SR04 vs ToF for Future Versions
 
 The current prototype uses HC-SR04 sensors for left and right detection because they are inexpensive and useful for demonstrating directional obstacle detection.
 
@@ -414,7 +456,7 @@ The final sensor selection should be based on:
 
 ---
 
-# 16. Future Ground and Pothole Detection
+# 17. Future Ground and Pothole Detection
 
 The current front ToF sensor is **not used for ground detection**.
 
@@ -461,7 +503,7 @@ However, this would require a substantially different algorithm from the current
 
 ---
 
-# 17. Required Code Changes for Ground Detection
+# 18. Required Code Changes for Ground Detection
 
 The future firmware should treat **ground sensing as a separate detection subsystem**.
 
@@ -511,7 +553,7 @@ Multiple measurements should be used to determine whether the change is persiste
 
 ---
 
-# 18. Ground Detection and User Movement
+# 19. Ground Detection and User Movement
 
 Ground detection would also need to consider the user's movement.
 
@@ -541,7 +583,7 @@ This would make the ground-detection system more reliable.
 
 ---
 
-# 19. Future Alert Architecture
+# 20. Future Alert Architecture
 
 The final system would have more detection categories:
 
@@ -578,7 +620,7 @@ This would allow the final product to determine not only that an obstacle exists
 
 ---
 
-# 20. Future Audio System
+# 21. Future Audio System
 
 The current prototype uses:
 
@@ -630,7 +672,7 @@ This would allow the system to provide more detailed and real-time information t
 
 ---
 
-# 21. Bone-Conduction Audio
+# 22. Bone-Conduction Audio
 
 The final product is intended to use **bone-conduction speakers** instead of the prototype's external/local speaker.
 
@@ -642,7 +684,7 @@ The current DFPlayer controller is intentionally kept separate from the main dec
 
 ---
 
-# 22. Prototype vs Full Product
+# 23. Prototype vs Full Product
 
 | Feature                 | Current Prototype  | Future Full Product                   |
 | ----------------------- | ------------------ | ------------------------------------- |
@@ -650,7 +692,7 @@ The current DFPlayer controller is intentionally kept separate from the main dec
 | Front ToF               | Yes                | Yes                                   |
 | Left obstacle sensing   | HC-SR04            | HC-SR04 or ToF                        |
 | Right obstacle sensing  | HC-SR04            | HC-SR04 or ToF                        |
-| Rear sensing            | No                 | Additional sensors                    |
+| Rear sensing            | Yes                | Wider/improved rear coverage           |
 | Ground sensing          | No                 | Downward-facing ToF                   |
 | Pothole detection       | No                 | Planned                               |
 | Drop-off detection      | No                 | Planned                               |
@@ -669,7 +711,7 @@ The current DFPlayer controller is intentionally kept separate from the main dec
 
 ---
 
-# 23. Firmware Evolution
+# 24. Firmware Evolution
 
 The current prototype firmware is structured so that additional sensing can be incorporated without completely redesigning the decision system.
 
@@ -732,7 +774,7 @@ HAPTIC        TTS AUDIO
 
 ---
 
-# 24. Important Prototype Disclaimer
+# 25. Important Prototype Disclaimer
 
 This repository represents a **prototype research/development implementation**.
 
@@ -755,7 +797,7 @@ A production system would require extensive hardware validation, sensor characte
 
 ---
 
-# 25. Future Development Roadmap
+# 26. Future Development Roadmap
 
 ### Phase 1 — Current Prototype
 
@@ -774,7 +816,6 @@ A production system would require extensive hardware validation, sensor characte
 
 ### Phase 2 — Expanded Environmental Awareness
 
-* [ ] Rear obstacle sensors
 * [ ] Additional ToF sensors
 * [ ] Improved sensor fusion
 * [ ] Improved movement/orientation estimation
@@ -810,11 +851,11 @@ Potential future additions include:
 
 ---
 
-# 26. Conclusion
+# 27. Conclusion
 
 CLEAR SIGHT currently demonstrates the core concept of an **offline, sensor-based assistive smart-glasses system**.
 
-The prototype focuses on reliable obstacle detection from the front, left, and right, followed by filtering, persistence, confidence evaluation, priority selection, and directional feedback through vibration and prerecorded audio.
+The prototype focuses on reliable obstacle detection from the front, left, right, and rear, followed by filtering, persistence, confidence evaluation, priority selection, and directional feedback through vibration and prerecorded audio.
 
 The prototype is intentionally smaller than the planned final product.
 
